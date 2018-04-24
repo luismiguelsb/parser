@@ -36,6 +36,7 @@ public:
     double MappingDouble(string);
     void InsertLabel(string);
     void InitializeListNode();
+    void PrintListNode();
 };
 
 

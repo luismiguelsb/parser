@@ -7,7 +7,7 @@
 
 using namespace std ;
 
-void main(int argc, const char **argv) {
+int main(int argc, const char **argv) {
 
 if(argc != 2){
     cout << "Missing parameter!" << endl; 
@@ -18,4 +18,6 @@ if(argc != 2){
         Circuit myCircuit;
         myCircuit.readFile(myFile, argv[1]);
     }
+
+    return 0;
 }

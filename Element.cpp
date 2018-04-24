@@ -127,6 +127,16 @@ void Element::PrintList( ) {
             case 'i': cout << (char) toupper(id) << "SR[" << label.c_str() << "] ; "; break;
             case 'R':
             case 'r': cout << (char) toupper(id) << "ES[" << label.c_str() << "] ; "; break;
+            case 'g':
+            case 'G': cout << "VCCS[" << label.c_str() << "] ; "; break;
+            case 'e':
+            case 'E': cout << "VCVS[" << label.c_str() << "] ; "; break;
+            case 'f':
+            case 'F': cout << "CCCS[" << label.c_str() << "] ; "; break;
+            case 'h':
+            case 'H': cout << "CCVS[" << label.c_str() << "] ; "; break;
+            default: cout << "Formato nao reconhecido!" << endl;
+
         }
         cout << "n+[" << nodeA << "],  n-[" << nodeB << "]; ";
         if(nodeC != -1)
@@ -142,5 +152,20 @@ void Element::PrintList( ) {
         j++;
 
     }
+
+}
+
+void Element::PrintListNode( ) {
+listNode myNodes;
+std::list<listNode>::iterator it;
+for (it = Table.begin(); it != Table.end(); it++) {
+char idNum = it->idNum;
+std::string label = it->label;
+
+myNodes.idNum = idNum;
+myNodes.label = label;
+
+cout << "ID: " << myNodes.idNum << " Label: " << myNodes.label.c_str() << endl;
+}
 
 }

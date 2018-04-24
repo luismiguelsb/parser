@@ -1,16 +1,18 @@
+CFLAGS = -std=c++11
+
 all: parser
 
 parser: Circuit.o Element.o main.o 
-	g++ $^ -o $@
+	g++ $^ -o $@ $(CFLAGS)
 
-Circuit.o: Circuit.cpp Circuit.h Element.h
-	g++ $< -o $@
+Circuit.o: Circuit.cpp Element.h Circuit.h 
+	g++ -c -o $@ $< $(CFLAGS)
 
 Element.o: Element.cpp Element.h
-	g++ $< -o $@
+	g++ -c -o $@ $< $(CFLAGS)
 
-main.o: main.cpp Element.h Circuit.h
-	g++ $^ -o $@
+main.o: main.cpp Element.h Circuit.h 
+	g++ -c -o $@ $< $(CFLAGS)
 
 clean:
 	rm *.o parser

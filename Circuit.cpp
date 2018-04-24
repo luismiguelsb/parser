@@ -36,6 +36,12 @@ case 'Q': //TJB
 case 'q':
 case 'M': //MOSFET
 case 'm': Parameter = 5; break;
+case 'f':
+case 'F':
+case 'g':
+case 'G':
+case 'e':
+case 'E': Parameter = 6; break;
 case ' ':
 case '\t': break;
 case '\n': break;
@@ -53,7 +59,6 @@ Piece = readLabel(myFile, singleCharacter, Parameter); //Realiza a tokenizacao
 if(!(myElement.checkFormat(Piece, Parameter))) //Checa o formato
 cout << "Formato invalido!\n";
 else {
-//myElement.IdentifyComponent(Piece);
 
 myElement.InsertList(Piece);
 
@@ -61,7 +66,10 @@ myElement.InsertList(Piece);
 }
 }
 
+cout << "Lista encadeada de elementos:" << endl;
 myElement.PrintList();
+cout << endl << endl << "Tabela de nos:" << endl;
+myElement.PrintListNode();
 
 myFile.close();
 
@@ -95,13 +103,19 @@ if(i == 1)
 Piece.nodeA = myElement.Mapping(point);
 if(i == 2)
 Piece.nodeB = myElement.Mapping(point);
-if(i == 3)
-Piece.value = myElement.MappingDouble(point);
-if(i == 4)
-Piece.nodeC = myElement.Mapping(point);
+if(i == 3){
+    if(Parameter == 4)
+        Piece.value = myElement.MappingDouble(point);
+    if(Parameter == 5 || Parameter == 6)
+        Piece.nodeC = myElement.Mapping(point);
+}
+if(i == 4){
+    if(Parameter == 5)
+        Piece.value = myElement.MappingDouble(point);
+    if(Parameter == 6)
+        Piece.nodeD = myElement.Mapping(point);
+}
 if(i == 5)
-Piece.nodeD = myElement.Mapping(point);
-if(i == 6)
 Piece.value = myElement.MappingDouble(point);
 i++;
 point = strtok (NULL, " \t");
