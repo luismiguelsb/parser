@@ -45,24 +45,25 @@ case 'E': Parameter = 6; break;
 case ' ':
 case '\t': break;
 case '\n': break;
-case '.': break;
+case '.': 
+case '*': myFile.getline(firstLine,LIM); break;
 default: cout << "Formato invalido!\n";
 }
 
 
-if(singleCharacter != '.' && singleCharacter != '\n') { //Caracterer que serao ignorados
+if(singleCharacter != '.' && singleCharacter != '\n' && singleCharacter != '*') { //Caracterer que serao ignorados
 Piece = readLabel(myFile, singleCharacter, Parameter); //Realiza a tokenizacao
 
-//cout << Piece.id << Piece.nodeA.c_str() << Piece.nodeB.c_str() << Piece.value.c_str();
+//cout << Piece.id << Piece.nodeA << Piece.nodeB << Piece.value;
 
 
-if(!(myElement.checkFormat(Piece, Parameter))) //Checa o formato
-cout << "Formato invalido!\n";
-else {
+//if(!(myElement.checkFormat(Piece, Parameter))) //Checa o formato
+  //  cout << "Formato invalido!\n";
+//else {
 
 myElement.InsertList(Piece);
 
-}
+//}
 }
 }
 
@@ -116,7 +117,7 @@ if(i == 4){
         Piece.nodeD = myElement.Mapping(point);
 }
 if(i == 5)
-Piece.value = myElement.MappingDouble(point);
+    Piece.value = myElement.MappingDouble(point);
 i++;
 point = strtok (NULL, " \t");
 }

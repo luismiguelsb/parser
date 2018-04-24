@@ -3,28 +3,8 @@
 
 list <listNode> Table;
 list <Element> OriginalList;
-int i=1;
-int j = 1;
-
-
-
-void Element::IdentifyComponent(Element Piece){
-
-    cout << Piece.id;
-    cout << Piece.label.c_str();
-    cout << Piece.nodeA;
-    cout << Piece.nodeB;
-    cout << Piece.value;
-}
-
-
-int Element::checkFormat(Element Piece, int Parameter) {
-
-    if(Piece.id == '\0') {
-        return 0;
-    }
-    return 1;
-}
+int i = 1;
+int j = 0;
 
 
 void Element::InsertList(Element Piece) {
@@ -46,9 +26,10 @@ int Element::Mapping(string node) {
 
             nodeX.idNum = idNum;
             nodeX.label = label;
-
-            if (label == node)
+            if (label == node){
                 found = 1;
+                return nodeX.idNum;
+            }
         }
 
         //Se não encontrou insere na lista
@@ -58,18 +39,29 @@ int Element::Mapping(string node) {
             nodeX.label = node;
             //cout << "id: " << nodeX.idNum << " label: " << nodeX.label.c_str() << endl;
             Table.push_back(nodeX);
+            return nodeX.idNum;
         }
-
-        return i-1;
     }
 
 }
 
 double Element::MappingDouble(string value) {
     int k = 0;
+
+    //Caso for uma string e nao um numero
+ 
+    if(strtod(value.c_str(), NULL) == 0){
+        if(value[k] == '0')
+            return 0;
+            else
+                return -1; 
+    }
+
+
     while(value[k] != '\0'){
      if (isdigit(value[k]))
          k++;
+
 
      else{
          switch (value[k]) {
@@ -99,13 +91,14 @@ double Element::MappingDouble(string value) {
 void Element::InitializeListNode() {
     listNode nodeX;
 
-    nodeX.label = "Ground";
+    nodeX.label = "0";
     nodeX.idNum = 0;
 
     Table.push_back(nodeX);
 }
 
 void Element::PrintList( ) {
+    int ok = 1;
     std::list<Element>::iterator it;
 
     for (it = OriginalList.begin(); it != OriginalList.end(); it++) {
@@ -135,9 +128,20 @@ void Element::PrintList( ) {
             case 'F': cout << "CCCS[" << label.c_str() << "] ; "; break;
             case 'h':
             case 'H': cout << "CCVS[" << label.c_str() << "] ; "; break;
-            default: cout << "Formato nao reconhecido!" << endl;
+            case 'c':
+            case 'C': cout << "CAP[" << label.c_str() << "] ; "; break;
+            case 'l':
+            case 'L': cout << "IND[" << label.c_str() << "] ; "; break;
+            case 'd':
+            case 'D': cout << "DIO[" << label.c_str() << "] ; "; break;
+            case 'q':
+            case 'Q': cout << "TJB[" << label.c_str() << "] ; "; break;
+            case 'm':
+            case 'M': cout << "MOS[" << label.c_str() << "] ; "; break;
+            default: cout << "Formato invalido!" << endl; ok = 0; break;
 
         }
+        if (ok==1){
         cout << "n+[" << nodeA << "],  n-[" << nodeB << "]; ";
         if(nodeC != -1)
             cout << "nx+[" << nodeC << "]; ";
@@ -149,13 +153,16 @@ void Element::PrintList( ) {
         cout.setf(ios::scientific);
         cout << value<< endl;
         cout.unsetf(ios::scientific);
+        }
         j++;
+        ok = 1;
 
     }
 
 }
 
 void Element::PrintListNode( ) {
+int m = 0; 
 listNode myNodes;
 std::list<listNode>::iterator it;
 for (it = Table.begin(); it != Table.end(); it++) {
@@ -165,7 +172,7 @@ std::string label = it->label;
 myNodes.idNum = idNum;
 myNodes.label = label;
 
-cout << "ID: " << myNodes.idNum << " Label: " << myNodes.label.c_str() << endl;
+cout << "ID: " << m++ << " Label: " << myNodes.label.c_str() << endl;
 }
 
 }

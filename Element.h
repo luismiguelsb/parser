@@ -28,8 +28,6 @@ public:
     double value;
 
 public:
-    int checkFormat(Element, int);
-    void IdentifyComponent(Element);
     void InsertList(Element);
     void PrintList();
     int Mapping(string);
