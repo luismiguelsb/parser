@@ -1,5 +1,5 @@
-#include "Circuit.h"
-#include "Element.h"
+#include "../include/Circuit.h"
+#include "../include/Element.h"
 
 
 void Circuit::readFile(ifstream &myFile, string fileName) {

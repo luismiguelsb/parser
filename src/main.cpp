@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cstring> // for std::strlen
 #include <cstddef> // for std::size_t -> is a typedef on an unsinged int
-#include "Circuit.h"
-#include "Element.h"
+#include "../include/Circuit.h"
+#include "../include/Element.h"
 
 
 using namespace std ;
