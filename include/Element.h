@@ -9,6 +9,7 @@ using namespace std ;
 #include <cstddef> // for std::size_t -> is a typedef on an unsinged int
 #include <list>
 #include <string>
+#include "Matrix.h"
 
 
 typedef struct {
@@ -36,6 +37,7 @@ public:
     void InitializeListNode();
     void PrintListNode();
     void PrintMatrix();
+    void MatrixHandler();
 
 };
 
