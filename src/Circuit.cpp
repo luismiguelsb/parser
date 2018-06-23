@@ -1,11 +1,15 @@
 #include "../include/Circuit.h"
 #include "../include/Element.h"
 
+
+
 void Circuit::readFile(ifstream &myFile, string fileName)
 {
     char singleCharacter;
     char firstLine[LIM];
+    list<Element> OriginalList;
     Element Piece;
+    Matrix myMatrix;
     listNode nodeX;
     int Parameter;
 
@@ -66,20 +70,19 @@ void Circuit::readFile(ifstream &myFile, string fileName)
         {                                                          //Caracterer que serao ignorados
             Piece = readLabel(myFile, singleCharacter, Parameter); //Realiza a tokenizacao
 
-            myElement.InsertList(Piece);
-
+            myElement.InsertList(Piece, OriginalList);
         }
     }
-    /*
-    cout << "Lista encadeada de elementos:" << endl;
-    myElement.PrintList();
+
+    /*cout << "Lista encadeada de elementos:" << endl;
+    myElement.PrintList(OriginalList);
     cout << endl
          << endl
          << "Tabela de nos:" << endl;
     myElement.PrintListNode();
     */
-   myElement.MatrixHandler();
-
+   myMatrix.PrintMatrix(OriginalList);
+   
     myFile.close();
 }
 

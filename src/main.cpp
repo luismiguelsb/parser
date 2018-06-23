@@ -3,6 +3,7 @@
 #include <cstddef> // for std::size_t -> is a typedef on an unsinged int
 #include "../include/Circuit.h"
 #include "../include/Element.h"
+#include "../include/Matrix.h"
 
 
 using namespace std ;

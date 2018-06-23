@@ -9,7 +9,6 @@ using namespace std ;
 #include <cstddef> // for std::size_t -> is a typedef on an unsinged int
 #include <list>
 #include <string>
-#include "Matrix.h"
 
 
 typedef struct {
@@ -29,15 +28,14 @@ public:
     double value;
 
 public:
-    void InsertList(Element);
-    void PrintList();
+    void InsertList(Element, list <Element> &);
+    void PrintList(list <Element> &);
     int Mapping(string);
     double MappingDouble(string);
     void InsertLabel(string);
     void InitializeListNode();
     void PrintListNode();
     void PrintMatrix();
-    void MatrixHandler();
 
 };
 

@@ -19,7 +19,7 @@ public:
 
 public:
     //funcoes
-    void PrintList(list <Element>);
+    void PrintMatrix(list <Element>);
 };
 
 

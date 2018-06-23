@@ -1,9 +1,13 @@
 
 #include "../include/Matrix.h"
 
-void Matrix::PrintList(list <Element> OriginalList) 
+void Matrix::PrintMatrix(list<Element> OriginalList)
 {
+
     int ok = 1;
+    int i = 1;
+    int j = 0;
+
     std::list<Element>::iterator it;
 
     for (it = OriginalList.begin(); it != OriginalList.end(); it++)
@@ -89,7 +93,5 @@ void Matrix::PrintList(list <Element> OriginalList)
         }
         j++;
         ok = 1;
-    }    
-    
+    }
 }
-
