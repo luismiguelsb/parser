@@ -1,8 +1,6 @@
 #include "../include/Circuit.h"
 #include "../include/Element.h"
 
-
-
 void Circuit::readFile(ifstream &myFile, string fileName)
 {
     char singleCharacter;
@@ -14,76 +12,83 @@ void Circuit::readFile(ifstream &myFile, string fileName)
     int Parameter;
 
     myElement.InitializeListNode();
+    myFile.open(fileName, ios::in);
 
-    myFile.open(fileName, ios::in); //Abre para leitura
+    if (myFile.is_open())
+    { //Abre para leitura
 
-    myFile.getline(firstLine, LIM); //Le a primeira linha de comentarios e ignora
+        myFile.getline(firstLine, LIM); //Le a primeira linha de comentarios e ignora
 
-    while (!myFile.eof())
-    {                                //Leitura até o fim do arquivo
-        myFile.get(singleCharacter); //Pega caracter por caracter
+        while (!myFile.eof())
+        {                                //Leitura até o fim do arquivo
+            myFile.get(singleCharacter); //Pega caracter por caracter
 
-        switch (singleCharacter)
-        {
-        case 'V': //Tensao
-        case 'v':
-        case 'I': //Corrente
-        case 'i':
-        case 'R': //Resistor
-        case 'r':
-        case 'C': //Capacitor
-        case 'c':
-        case 'L': //Indutor
-        case 'l':
-        case 'D': //Diodo
-        case 'd':
-            Parameter = 4;
-            break; //Parametro funciona pra indicar quantos campos cada componente tem
-        case 'Q':  //TJB
-        case 'q':
-        case 'M': //MOSFET
-        case 'm':
-            Parameter = 5;
-            break;
-        case 'f':
-        case 'F':
-        case 'g':
-        case 'G':
-        case 'e':
-        case 'E':
-            Parameter = 6;
-            break;
-        case ' ':
-        case '\t':
-            break;
-        case '\n':
-            break;
-        case '.':
-        case '*':
-            myFile.getline(firstLine, LIM);
-            break;
-        default:
-            cout << "Formato invalido!\n";
+            switch (singleCharacter)
+            {
+            case 'V': //Tensao
+            case 'v':
+            case 'I': //Corrente
+            case 'i':
+            case 'R': //Resistor
+            case 'r':
+            case 'C': //Capacitor
+            case 'c':
+            case 'L': //Indutor
+            case 'l':
+            case 'D': //Diodo
+            case 'd':
+                Parameter = 4;
+                break; //Parametro funciona pra indicar quantos campos cada componente tem
+            case 'Q':  //TJB
+            case 'q':
+            case 'M': //MOSFET
+            case 'm':
+                Parameter = 5;
+                break;
+            case 'f':
+            case 'F':
+            case 'g':
+            case 'G':
+            case 'e':
+            case 'E':
+                Parameter = 6;
+                break;
+            case ' ':
+            case '\t':
+                break;
+            case '\n':
+                break;
+            case '.':
+            case '*':
+                myFile.getline(firstLine, LIM);
+                break;
+            default:
+                cout << "Formato invalido!\n";
+            }
+
+            if (singleCharacter != '.' && singleCharacter != '\n' && singleCharacter != '*')
+            {                                                          //Caracterer que serao ignorados
+                Piece = readLabel(myFile, singleCharacter, Parameter); //Realiza a tokenizacao
+
+                myElement.InsertList(Piece, OriginalList);
+            }
         }
 
-        if (singleCharacter != '.' && singleCharacter != '\n' && singleCharacter != '*')
-        {                                                          //Caracterer que serao ignorados
-            Piece = readLabel(myFile, singleCharacter, Parameter); //Realiza a tokenizacao
-
-            myElement.InsertList(Piece, OriginalList);
-        }
-    }
-
-    /*cout << "Lista encadeada de elementos:" << endl;
+        /*cout << "Lista encadeada de elementos:" << endl;
     myElement.PrintList(OriginalList);
     cout << endl
          << endl
          << "Tabela de nos:" << endl;
     myElement.PrintListNode();
     */
-   myMatrix.PrintMatrix(OriginalList);
-   
-    myFile.close();
+        myMatrix.PrintMatrix(OriginalList);
+
+        myMatrix.SetGroup2(OriginalList);
+
+        myFile.close();
+    }
+    else
+        cout << "Error opening the file" << endl;
 }
 
 Element Circuit::readLabel(ifstream &myFile, char singleCharacter, int Parameter)

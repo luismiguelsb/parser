@@ -1,5 +1,6 @@
-
 #include "../include/Matrix.h"
+
+list<string> Group2Elements;
 
 void Matrix::PrintMatrix(list<Element> OriginalList)
 {
@@ -93,5 +94,80 @@ void Matrix::PrintMatrix(list<Element> OriginalList)
         }
         j++;
         ok = 1;
+    }
+}
+
+string Matrix::GetControlledElement(int node1, int node2, list <Element> OriginalList)
+{
+    std::list<Element>::iterator it;
+    string aux;
+
+    for (it = OriginalList.begin(); it != OriginalList.end(); it++)
+    {
+        // Access the object through iterator
+        char id = it->id;
+        string label = it->label;
+        int nodeA = it->nodeA;
+        int nodeB = it->nodeB;
+        int nodeC = it->nodeC;
+        int nodeD = it->nodeD;
+        double value = it->value;
+
+        if (nodeA == node1 & nodeB == node2)
+        {
+            return id+label;
+        }
+    }
+}
+        
+void Matrix::SetGroup2(list<Element> OriginalList)
+{
+    int ok = 1;
+    int i = 1;
+    int j = 0;
+    string aux;
+
+    std::list<Element>::iterator it;
+
+    for (it = OriginalList.begin(); it != OriginalList.end(); it++)
+    {
+        // Access the object through iterator
+        char id = it->id;
+        string label = it->label;
+        int nodeA = it->nodeA;
+        int nodeB = it->nodeB;
+        int nodeC = it->nodeC;
+        int nodeD = it->nodeD;
+        double value = it->value;
+
+        switch (id)
+        {
+        case 'V':
+        case 'v':
+        case 'g':
+        case 'G':
+        case 'e':
+        case 'E':
+            aux = id + label;
+            Group2Elements.push_back(aux);
+            break;
+        case 'f':
+        case 'F':
+        case 'h':
+        case 'H':
+            aux = id + label;
+            Group2Elements.push_back(aux);
+            //GetControlledElement(nodeC, nodeD, OriginalList);
+            //Group2Elements.push_back(aux);
+            break;
+        }
+    }
+
+    cout << "G2 members:" << endl;
+
+    for (auto v : Group2Elements)
+    {
+        // Access the object through iterator
+        cout << v << endl;
     }
 }
