@@ -21,6 +21,8 @@ void Matrix::PrintMatrix(list<Element> OriginalList)
         int nodeC = it->nodeC;
         int nodeD = it->nodeD;
         double value = it->value;
+        string controlled = it->controlled;
+
 
         //Print the contents
         cout << "#" << j << ": ";
@@ -75,7 +77,7 @@ void Matrix::PrintMatrix(list<Element> OriginalList)
             cout << "MOS[" << label.c_str() << "] ; ";
             break;
         default:
-            cout << "Formato invalido!" << endl;
+            cout << "Formato invalido:" << id << endl;
             ok = 0;
             break;
         }
@@ -86,6 +88,8 @@ void Matrix::PrintMatrix(list<Element> OriginalList)
                 cout << "nx+[" << nodeC << "]; ";
             if (nodeD != -1)
                 cout << "nx-[" << nodeD << "]; ";
+            if(id == 'H' || id == 'h' || id == 'f' || id == 'F')
+                cout << "Elem: " << controlled << " ; ";
 
             cout << "value =  ";
             cout.setf(ios::scientific);
@@ -97,29 +101,6 @@ void Matrix::PrintMatrix(list<Element> OriginalList)
     }
 }
 
-string Matrix::GetControlledElement(int node1, int node2, list <Element> OriginalList)
-{
-    std::list<Element>::iterator it;
-    string aux;
-
-    for (it = OriginalList.begin(); it != OriginalList.end(); it++)
-    {
-        // Access the object through iterator
-        char id = it->id;
-        string label = it->label;
-        int nodeA = it->nodeA;
-        int nodeB = it->nodeB;
-        int nodeC = it->nodeC;
-        int nodeD = it->nodeD;
-        double value = it->value;
-
-        if (nodeA == node1 & nodeB == node2)
-        {
-            return id+label;
-        }
-    }
-}
-        
 void Matrix::SetGroup2(list<Element> OriginalList)
 {
     int ok = 1;
@@ -131,16 +112,8 @@ void Matrix::SetGroup2(list<Element> OriginalList)
 
     for (it = OriginalList.begin(); it != OriginalList.end(); it++)
     {
-        // Access the object through iterator
-        char id = it->id;
-        string label = it->label;
-        int nodeA = it->nodeA;
-        int nodeB = it->nodeB;
-        int nodeC = it->nodeC;
-        int nodeD = it->nodeD;
-        double value = it->value;
 
-        switch (id)
+        switch (it->id)
         {
         case 'V':
         case 'v':
@@ -148,17 +121,14 @@ void Matrix::SetGroup2(list<Element> OriginalList)
         case 'G':
         case 'e':
         case 'E':
-            aux = id + label;
-            Group2Elements.push_back(aux);
+            Group2Elements.push_back(it->id + it->label);
             break;
         case 'f':
         case 'F':
         case 'h':
         case 'H':
-            aux = id + label;
-            Group2Elements.push_back(aux);
-            //GetControlledElement(nodeC, nodeD, OriginalList);
-            //Group2Elements.push_back(aux);
+            Group2Elements.push_back(it->id + it->label);
+            Group2Elements.push_back(it->controlled);
             break;
         }
     }
@@ -167,7 +137,6 @@ void Matrix::SetGroup2(list<Element> OriginalList)
 
     for (auto v : Group2Elements)
     {
-        // Access the object through iterator
         cout << v << endl;
     }
 }

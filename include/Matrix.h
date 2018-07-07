@@ -21,7 +21,6 @@ public:
     //funcoes
     void PrintMatrix(list <Element>);
     void SetGroup2(list <Element>);
-    string GetControlledElement(int, int, list <Element>);
 };
 
 

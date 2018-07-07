@@ -47,6 +47,10 @@ void Circuit::readFile(ifstream &myFile, string fileName)
                 break;
             case 'f':
             case 'F':
+            case 'h':
+            case 'H':
+                Parameter = 7;
+                break;
             case 'g':
             case 'G':
             case 'e':
@@ -82,6 +86,8 @@ void Circuit::readFile(ifstream &myFile, string fileName)
     myElement.PrintListNode();
     */
         myMatrix.PrintMatrix(OriginalList);
+
+        myElement.PrintListNode();
 
         myMatrix.SetGroup2(OriginalList);
 
@@ -124,6 +130,8 @@ Element Circuit::readLabel(ifstream &myFile, char singleCharacter, int Parameter
                 Piece.value = myElement.MappingDouble(point);
             if (Parameter == 5 || Parameter == 6)
                 Piece.nodeC = myElement.Mapping(point);
+            if (Parameter == 7)
+                Piece.controlled = point;
         }
         if (i == 4)
         {
@@ -131,6 +139,11 @@ Element Circuit::readLabel(ifstream &myFile, char singleCharacter, int Parameter
                 Piece.value = myElement.MappingDouble(point);
             if (Parameter == 6)
                 Piece.nodeD = myElement.Mapping(point);
+            if (Parameter == 7)
+            {
+                Piece.value = myElement.MappingDouble(point);
+                i = i + 2;
+            }
         }
         if (i == 5)
             Piece.value = myElement.MappingDouble(point);
@@ -141,6 +154,7 @@ Element Circuit::readLabel(ifstream &myFile, char singleCharacter, int Parameter
     if (i != Parameter)
     {                    //Se o numero de parametros passado for diferente do esperado
         Piece.id = '\0'; //Coloca o id com \0 para indicar erro
+        cout << "I: " << i << "Parameter: " << Parameter << endl;
     }
 
     return Piece;

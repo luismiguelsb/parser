@@ -26,6 +26,7 @@ public:
     int nodeC;
     int nodeD;
     double value;
+    string controlled;
 
 public:
     void InsertList(Element, list <Element> &);

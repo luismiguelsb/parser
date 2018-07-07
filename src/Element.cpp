@@ -113,7 +113,11 @@ void Element::InsertList(Element Piece, list<Element> &OriginalList)
 
 void Element::PrintList(list<Element> &OriginalList)
 {
+
     int ok = 1;
+    int i = 1;
+    int j = 0;
+
     std::list<Element>::iterator it;
 
     for (it = OriginalList.begin(); it != OriginalList.end(); it++)
@@ -126,6 +130,8 @@ void Element::PrintList(list<Element> &OriginalList)
         int nodeC = it->nodeC;
         int nodeD = it->nodeD;
         double value = it->value;
+        string controlled = it->controlled;
+
 
         //Print the contents
         cout << "#" << j << ": ";
@@ -180,7 +186,7 @@ void Element::PrintList(list<Element> &OriginalList)
             cout << "MOS[" << label.c_str() << "] ; ";
             break;
         default:
-            cout << "Formato invalido!" << endl;
+            cout << "Formato invalido:" << id << endl;
             ok = 0;
             break;
         }
@@ -191,6 +197,8 @@ void Element::PrintList(list<Element> &OriginalList)
                 cout << "nx+[" << nodeC << "]; ";
             if (nodeD != -1)
                 cout << "nx-[" << nodeD << "]; ";
+            if(id == 'H' || id == 'h' || id == 'f' || id == 'F')
+                cout << "Elem: " << controlled << " ; ";
 
             cout << "value =  ";
             cout.setf(ios::scientific);
