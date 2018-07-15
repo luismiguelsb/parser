@@ -37,6 +37,7 @@ public:
     void InitializeListNode();
     void PrintListNode();
     void PrintMatrix();
+    double getvalue();
 
 };
 

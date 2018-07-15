@@ -8,6 +8,7 @@ using namespace std ;
 #include <cstring> // for std::strlen
 #include <cstddef> // for std::size_t -> is a typedef on an unsinged int
 #include <list>
+#include <algorithm>
 #include <string>
 #include "Element.h"
 
@@ -15,12 +16,25 @@ using namespace std ;
 
 class Matrix{
 public:
-   //atributos
+   	Matrix(); //Default constructor
+	Matrix(int); //Main constructor
+	void setVal(int, int, int); //Method to set the val of [i,j]th-entry
+	void printMatrix(); //Method to display the matrix
+	~Matrix(); //Destructor
+
+private:
+	static int length;
+	int **p;
+
+	//allocate the array
+	void allocArray();
 
 public:
     //funcoes
-    void PrintMatrix(list <Element>);
-    void SetGroup2(list <Element>);
+    static void PrintList(list <Element>);
+    static int SetGroup2(list <Element>);
+	static int getlength();
+	static void initMatrix(list <Element>);
 };
 
 

@@ -227,3 +227,7 @@ void Element::PrintListNode()
     }
 }
 
+double Element::getvalue()
+{
+    return value;
+}

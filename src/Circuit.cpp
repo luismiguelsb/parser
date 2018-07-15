@@ -7,7 +7,6 @@ void Circuit::readFile(ifstream &myFile, string fileName)
     char firstLine[LIM];
     list<Element> OriginalList;
     Element Piece;
-    Matrix myMatrix;
     listNode nodeX;
     int Parameter;
 
@@ -85,12 +84,19 @@ void Circuit::readFile(ifstream &myFile, string fileName)
          << "Tabela de nos:" << endl;
     myElement.PrintListNode();
     */
-        myMatrix.PrintMatrix(OriginalList);
+
+        Matrix::PrintList(OriginalList);
 
         myElement.PrintListNode();
 
-        myMatrix.SetGroup2(OriginalList);
+        Matrix::SetGroup2(OriginalList);
 
+        Matrix myMatrix(Matrix::getlength());
+
+        myMatrix.initMatrix(OriginalList);
+
+        myMatrix.printMatrix();
+        
         myFile.close();
     }
     else
