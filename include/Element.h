@@ -35,7 +35,7 @@ public:
     double MappingDouble(string);
     void InsertLabel(string);
     void InitializeListNode();
-    void PrintListNode();
+    int PrintListNode();
     void PrintMatrix();
     double getvalue();
 

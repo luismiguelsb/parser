@@ -1,13 +1,14 @@
 #include "../include/Matrix.h"
 
-list <string> Group2Elements;
+list<string> Group2Elements;
 
 //Default constructor
 Matrix::Matrix()
 {
 }
 
-int Matrix::length;
+int Matrix::lengthH;
+int Matrix::lengthB;
 
 //Main construcor
 Matrix::Matrix(int m)
@@ -17,7 +18,7 @@ Matrix::Matrix(int m)
     {
         for (int j = 0; j < m; j++)
         {
-            p[i][j] = 0;
+            matrixH[i][j] = 0;
         }
     }
 }
@@ -25,36 +26,31 @@ Matrix::Matrix(int m)
 //destructor
 Matrix::~Matrix()
 {
-    for (int i = 0; i < Matrix::length; i++)
+    for (int i = 0; i < Matrix::lengthH; i++)
     {
-        delete[] p[i];
+        delete[] matrixH[i];
     }
-    delete[] p;
+    delete[] matrixH;
+    delete[] matrixB;
 }
 
 void Matrix::allocArray()
 {
-    p = new int *[Matrix::length];
-    for (int i = 0; i < Matrix::length; i++)
+    matrixH = new double *[Matrix::lengthH];
+    for (int i = 0; i < Matrix::lengthH; i++)
     {
-        p[i] = new int[Matrix::length];
+        matrixH[i] = new double[Matrix::lengthH];
     }
-}
-
-//SetVal function
-void Matrix::setVal(int m, int n, int value)
-{
-    p[m][n] = value;
 }
 
 //printMatrix function
 void Matrix::printMatrix()
 {
-    for (int i = 0; i < Matrix::length; i++)
+    for (int i = 0; i < Matrix::lengthH; i++)
     {
-        for (int j = 0; j < Matrix::length; j++)
+        for (int j = 0; j < Matrix::lengthH; j++)
         {
-            cout << p[i][j] << "\t";
+            cout << matrixH[i][j] << "\t";
         }
 
         cout << endl;
@@ -159,18 +155,14 @@ void Matrix::PrintList(list<Element> OriginalList)
     }
 }
 
-int Matrix::SetGroup2(list<Element> OriginalList)
+void Matrix::SetGroup2(list<Element> OriginalList, int numNodes)
 {
-    int ok = 1;
-    int i = 1;
-    int j = 0;
-    string aux;
+    int countH = 0;
 
     std::list<Element>::iterator it;
 
     for (it = OriginalList.begin(); it != OriginalList.end(); it++)
     {
-
         switch (it->id)
         {
         case 'V':
@@ -187,6 +179,7 @@ int Matrix::SetGroup2(list<Element> OriginalList)
         case 'H':
             Group2Elements.push_back(it->id + it->label);
             Group2Elements.push_back(it->controlled);
+            countH++;
             break;
         }
     }
@@ -196,41 +189,103 @@ int Matrix::SetGroup2(list<Element> OriginalList)
     for (auto v : Group2Elements)
     {
         cout << v << endl;
-        j++;
     }
 
-    length = j;
-
-    return j;
+    lengthH = countH + numNodes;
+    lengthB = numNodes;
 }
 
-void Matrix::initMatrix(list<Element> OriginalList)
+//SetVal function
+void Matrix::setVal(int m, int n, double value)
 {
+    if (m != 0)
+        matrixH[m-1][m-1] += 1/value;
+    if (m != 0 && n != 0)
+    {
+        matrixH[m-1][n-1] += -1/value;
+        matrixH[n-1][m-1] += -1/value;
+    }
+    if (n != 0)
+        matrixH[n-1][n-1] += 1/value;
+}
+
+void Matrix::setValC(int m, int n, int o, double value)
+{
+    if (m != 0)
+    {
+        matrixH[o-1][m-1] += 1;
+        matrixH[m-1][o-1] += 1;
+    }
+    if (n != 0)
+    {
+        matrixH[o-1][n-1] += -1;
+        matrixH[n-1][o-1] += -1;
+    }
+    matrixH[o-1][o-1] += value;
+}
+
+void Matrix::initMatrixH(list<Element> OriginalList)
+{
+    int number;
 
     std::list<Element>::iterator it;
 
     for (it = OriginalList.begin(); it != OriginalList.end(); it++)
     {
-        // Access the object through iterator
-        char id = it->id;
-        string label = it->label;
-        int nodeA = it->nodeA;
-        int nodeB = it->nodeB;
-        int nodeC = it->nodeC;
-        int nodeD = it->nodeD;
-        double value = it->value;
-        string controlled = it->controlled;
- 
-        if(it->id == 'R'){
-            if(find(Group2Elements.begin(), Group2Elements.end(), id+label) != Group2Elements.end())
+        if (it->id == 'R')
+        {
+            number = lookstring(it->id + it->label);
+            if (number == 0) // Não encontrou no G2 entao é G1
             {
-                //setVal(nodeA, nodeB, value);
+                this->setVal(it->nodeA, it->nodeB, it->value);
             }
+            else // se or G2
+                this->setValC(it->nodeA, it->nodeB, lengthB + number, it->value);
         }
     }
 }
 
-int Matrix::getlength()
+int Matrix::getlengthH()
 {
-    return length;
+    return lengthH;
+}
+
+int Matrix::getlengthB()
+{
+    return lengthB;
+}
+
+void Matrix::initMatrixB()
+{
+    matrixB = new double *[Matrix::lengthH];
+    for (int i = 0; i < lengthH; i++)
+    {
+        matrixB[i] = 0;
+    }
+
+    cout << "Matrix B:" << endl;
+    for (int i = 0; i < lengthH; i++)
+    {
+        cout << matrixB[i] << endl;
+    }
+}
+
+//returns 0 if string not found, return index if found
+int Matrix::lookstring(string idlabel)
+{
+    int cont = 0;
+    std::list<string>::iterator it;
+
+    it = Group2Elements.begin();
+
+    if (find(Group2Elements.begin(), Group2Elements.end(), idlabel) != Group2Elements.end())
+        for (auto v : Group2Elements)
+        {
+            if (v.front() == ('R') || v.front() == ('r') && v == idlabel) //procura ate encontrar
+                break;
+            else
+                cont++;
+        }
+
+    return cont;
 }

@@ -9,6 +9,7 @@ void Circuit::readFile(ifstream &myFile, string fileName)
     Element Piece;
     listNode nodeX;
     int Parameter;
+    int numNodes;
 
     myElement.InitializeListNode();
     myFile.open(fileName, ios::in);
@@ -77,25 +78,20 @@ void Circuit::readFile(ifstream &myFile, string fileName)
             }
         }
 
-        /*cout << "Lista encadeada de elementos:" << endl;
-    myElement.PrintList(OriginalList);
-    cout << endl
-         << endl
-         << "Tabela de nos:" << endl;
-    myElement.PrintListNode();
-    */
-
         Matrix::PrintList(OriginalList);
 
-        myElement.PrintListNode();
+        numNodes = myElement.PrintListNode();
 
-        Matrix::SetGroup2(OriginalList);
+        Matrix::SetGroup2(OriginalList, numNodes);
 
-        Matrix myMatrix(Matrix::getlength());
+        Matrix myMatrix(Matrix::getlengthH());
 
-        myMatrix.initMatrix(OriginalList);
+        myMatrix.initMatrixH(OriginalList);
 
+        cout << "Matrix H:" << endl;
         myMatrix.printMatrix();
+
+        myMatrix.initMatrixB();
         
         myFile.close();
     }

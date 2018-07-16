@@ -18,23 +18,28 @@ class Matrix{
 public:
    	Matrix(); //Default constructor
 	Matrix(int); //Main constructor
-	void setVal(int, int, int); //Method to set the val of [i,j]th-entry
+	void setVal(int, int, double); //Method to set the val of [i,j]th-entry
+	void setValC(int, int, int, double);
 	void printMatrix(); //Method to display the matrix
 	~Matrix(); //Destructor
 
 private:
-	static int length;
-	int **p;
-
+	static int lengthH;
+	static int lengthB;
+	double **matrixH;
+	double **matrixB;
 	//allocate the array
 	void allocArray();
 
 public:
     //funcoes
     static void PrintList(list <Element>);
-    static int SetGroup2(list <Element>);
-	static int getlength();
-	static void initMatrix(list <Element>);
+    static void SetGroup2(list <Element>, int);
+	static int getlengthH();
+	static int getlengthB();
+	void initMatrixH(list <Element>);
+	void initMatrixB();
+	int lookstring(string);
 };
 
 

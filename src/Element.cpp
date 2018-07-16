@@ -210,7 +210,7 @@ void Element::PrintList(list<Element> &OriginalList)
     }
 }
 
-void Element::PrintListNode()
+int Element::PrintListNode()
 {
     int m = 0;
     listNode myNodes;
@@ -225,6 +225,7 @@ void Element::PrintListNode()
 
         cout << "ID: " << m++ << " Label: " << myNodes.label.c_str() << endl;
     }
+    return m-1;
 }
 
 double Element::getvalue()
