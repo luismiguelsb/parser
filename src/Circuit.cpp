@@ -85,13 +85,17 @@ void Circuit::readFile(ifstream &myFile, string fileName)
         Matrix::SetGroup2(OriginalList, numNodes);
 
         Matrix myMatrix(Matrix::getlengthH());
-
+        
+        myMatrix.initMatrixB();
         myMatrix.initMatrixH(OriginalList);
 
-        cout << "Matrix H:" << endl;
-        myMatrix.printMatrix();
 
-        myMatrix.initMatrixB();
+        cout << endl << "Matrix H:" << endl;
+        myMatrix.printMatrixH();
+
+        cout << endl << "Matrix B:" << endl;
+        myMatrix.printMatrixB();
+
         
         myFile.close();
     }

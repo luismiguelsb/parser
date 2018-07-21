@@ -20,14 +20,15 @@ public:
 	Matrix(int); //Main constructor
 	void setVal(int, int, double); //Method to set the val of [i,j]th-entry
 	void setValC(int, int, int, double);
-	void printMatrix(); //Method to display the matrix
+	void printMatrixH(); //Method to display the matrix
+	void printMatrixB(); //Method to display the matrix
 	~Matrix(); //Destructor
 
 private:
 	static int lengthH;
 	static int lengthB;
 	double **matrixH;
-	double **matrixB;
+	double *matrixB;
 	//allocate the array
 	void allocArray();
 
@@ -40,6 +41,8 @@ public:
 	void initMatrixH(list <Element>);
 	void initMatrixB();
 	int lookstring(string);
+	void Matrix::inverse(int, float)
+
 };
 
 
