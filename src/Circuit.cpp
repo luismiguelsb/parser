@@ -31,14 +31,14 @@ void Circuit::readFile(ifstream &myFile, string fileName)
             case 'i':
             case 'R': //Resistor
             case 'r':
-            case 'C': //Capacitor
-            case 'c':
             case 'L': //Indutor
             case 'l':
             case 'D': //Diodo
             case 'd':
                 Parameter = 4;
                 break; //Parametro funciona pra indicar quantos campos cada componente tem
+            case 'C': //Capacitor
+            case 'c':
             case 'Q':  //TJB
             case 'q':
             case 'M': //MOSFET
