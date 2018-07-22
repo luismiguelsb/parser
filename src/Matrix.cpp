@@ -187,7 +187,6 @@ void Matrix::SetGroup2(list<Element> OriginalList, int numNodes)
     {
         cout << v << endl;
         countH++;
-
     }
 
     lengthH = countH + numNodes;
@@ -268,7 +267,7 @@ void Matrix::initMatrixH(list<Element> OriginalList)
             {
                 matrixH[it->nodeA - 1][lengthB + number - 1] += 1;
                 matrixH[lengthB + number - 1][it->nodeA - 1] += 1;
-            } 
+            }
             if (it->nodeB != 0)
             {
                 matrixH[it->nodeB - 1][lengthB + number - 1] += -1;
@@ -336,16 +335,16 @@ void Matrix::initMatrixH(list<Element> OriginalList)
             if (it->nodeA != 0)
             {
                 if (it->nodeC != 0)
-                matrixH[it->nodeA - 1][it->nodeC - 1] += it->value;
+                    matrixH[it->nodeA - 1][it->nodeC - 1] += it->value;
                 if (it->nodeD != 0)
-                matrixH[it->nodeA - 1][it->nodeD - 1] += -it->value;
+                    matrixH[it->nodeA - 1][it->nodeD - 1] += -it->value;
             }
             if (it->nodeB != 0)
             {
                 if (it->nodeC != 0)
-                matrixH[it->nodeB - 1][it->nodeC - 1] += -it->value;
+                    matrixH[it->nodeB - 1][it->nodeC - 1] += -it->value;
                 if (it->nodeD != 0)
-                matrixH[it->nodeB - 1][it->nodeD - 1] += it->value;
+                    matrixH[it->nodeB - 1][it->nodeD - 1] += it->value;
             }
         }
     }
@@ -398,24 +397,125 @@ int Matrix::lookstring(string idlabel)
     return 0;
 }
 
-void Matrix::inverse(int A[N][N], float inverse[N][N])
+// Function to get cofactor of A[p][q] in temp[][]. n is current
+// dimension of A[][]
+void Matrix::getCofactor(double** temp, int p, int q, int n)
+{
+    int i = 0, j = 0;
+
+    // Looping for each element of the matrix
+    for (int row = 0; row < n; row++)
+    {
+        for (int col = 0; col < n; col++)
+        {
+            //  Copying into temporary matrix only those element
+            //  which are not in given row and column
+            if (row != p && col != q)
+            {
+                temp[i][j++] = matrixH[row][col];
+
+                // Row is filled, so increase row index and
+                // reset col index
+                if (j == n - 1)
+                {
+                    j = 0;
+                    i++;
+                }
+            }
+        }
+    }
+}
+
+/* Recursive function for finding determinant of matrix.
+   n is current dimension of A[][]. */
+int Matrix::determinant(double **A, int n)
+{
+    int D = 0; // Initialize result
+
+    //  Base case : if matrix contains single element
+    if (n == 1)
+        return A[0][0];
+
+    double temp[lengthH][lengthH]; // To store cofactors
+
+    int sign = 1; // To store sign multiplier
+
+    // Iterate for each element of first row
+    for (int f = 0; f < n; f++)
+    {
+        // Getting Cofactor of A[0][f]
+        getCofactor((double**)temp, 0, f, n);
+        D += sign * A[0][f] * determinant((double**)temp, n - 1);
+
+        // terms are to be added with alternate sign
+        sign = -sign;
+    }
+
+    return D;
+}
+
+// Function to get adjoint of A[N][N] in adj[N][N].
+void Matrix::adjoint(double **adj)
+{
+    /*if (N == 1)
+    {
+        adj[0][0] = 1;
+        return;
+    }*/
+
+    // temp is used to store cofactors of A[][]
+    int sign = 1;
+    
+    double temp[lengthH][lengthH];
+
+    for (int i = 0; i < lengthH; i++)
+    {
+        for (int j = 0; j < lengthH; j++)
+        {
+            // Get cofactor of A[i][j]
+            getCofactor((double**)temp, i, j, lengthH);
+
+            // sign of adj[j][i] positive if sum of row
+            // and column indexes is even.
+            sign = ((i + j) % 2 == 0) ? 1 : -1;
+
+            // Interchanging rows and columns to get the
+            // transpose of the cofactor matrix
+            adj[j][i] = (sign) * (determinant((double**)temp, lengthH - 1));
+        }
+    }
+}
+
+// Function to calculate and store inverse, returns false if
+// matrix is singular
+bool Matrix::inverse(double **inverse)
 {
     // Find determinant of A[][]
-    int det = determinant(A, N);
+    int det = determinant(matrixH, lengthH);
     if (det == 0)
     {
         cout << "Singular matrix, can't find its inverse";
         return false;
     }
- 
+
     // Find adjoint
-    int adj[N][N];
-    adjoint(A, adj);
- 
+    double adj[lengthH][lengthH];
+    adjoint((double**)adj);
+
     // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
-    for (int i=0; i<N; i++)
-        for (int j=0; j<N; j++)
-            inverse[i][j] = adj[i][j]/float(det);
- 
+    for (int i = 0; i < lengthH; i++)
+        for (int j = 0; j < lengthH; j++)
+            inverse[i][j] = adj[i][j] / float(det);
+
     return true;
+}
+
+void Matrix::display(double **matrix)
+{
+    for (int i = 0; i < lengthH; i++)
+        for (int j = 0; j < lengthH; j++)
+        {
+            cout << matrix[i][j] << "\t";
+        }
+    cout << endl;
 }

@@ -85,18 +85,32 @@ void Circuit::readFile(ifstream &myFile, string fileName)
         Matrix::SetGroup2(OriginalList, numNodes);
 
         Matrix myMatrix(Matrix::getlengthH());
-        
+
         myMatrix.initMatrixB();
         myMatrix.initMatrixH(OriginalList);
 
-
-        cout << endl << "Matrix H:" << endl;
+        cout << endl
+             << "Matrix H:" << endl;
         myMatrix.printMatrixH();
 
-        cout << endl << "Matrix B:" << endl;
+        cout << endl
+             << "Matrix B:" << endl;
         myMatrix.printMatrixB();
 
+        int l = Matrix::getlengthH();
+
+        double adj[l][l]; // To store adjoint of A[][]
         
+        double inv[l][l]; // To store inverse of A[][]
+
+        cout << "\nThe Adjoint is :\n";
+        myMatrix.adjoint((double**)adj);
+        //myMatrix.display(adj);
+
+        cout << "\nThe Inverse is :\n";
+        if (myMatrix.inverse((double**)inv))
+            myMatrix.display((double**)inv);
+
         myFile.close();
     }
     else

@@ -41,7 +41,12 @@ public:
 	void initMatrixH(list <Element>);
 	void initMatrixB();
 	int lookstring(string);
-	void Matrix::inverse(int, float)
+	void getCofactor(double **, int, int, int);
+	int determinant(double **, int);
+	void adjoint(double**);
+	bool inverse(double**);
+	void display(double**);
+
 
 };
 
