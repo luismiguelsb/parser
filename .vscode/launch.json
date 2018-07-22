@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/tests/parser",
-            "args": ["${workspaceFolder}/tests/ex5.sp"],
+            "args": ["${workspaceFolder}/tests/ex1.sp"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

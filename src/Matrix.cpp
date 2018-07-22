@@ -388,7 +388,7 @@ int Matrix::lookstring(string idlabel)
     if (find(Group2Elements.begin(), Group2Elements.end(), idlabel) != Group2Elements.end())
         for (auto v : Group2Elements)
         {
-            if (v == idlabel) //procura ate encontrar
+            if (v == idlabel) //search till find it
                 return cont;
             else
                 cont++;
@@ -399,7 +399,7 @@ int Matrix::lookstring(string idlabel)
 
 // Function to get cofactor of A[p][q] in temp[][]. n is current
 // dimension of A[][]
-void Matrix::getCofactor(double** temp, int p, int q, int n)
+void Matrix::getCofactor(vector<vector<double>> &temp, int p, int q, int n)
 {
     int i = 0, j = 0;
 
@@ -413,7 +413,6 @@ void Matrix::getCofactor(double** temp, int p, int q, int n)
             if (row != p && col != q)
             {
                 temp[i][j++] = matrixH[row][col];
-
                 // Row is filled, so increase row index and
                 // reset col index
                 if (j == n - 1)
@@ -428,15 +427,11 @@ void Matrix::getCofactor(double** temp, int p, int q, int n)
 
 /* Recursive function for finding determinant of matrix.
    n is current dimension of A[][]. */
-int Matrix::determinant(double **A, int n)
+int Matrix::determinant(vector<vector<double>> &A, int n)
 {
     int D = 0; // Initialize result
 
-    //  Base case : if matrix contains single element
-    if (n == 1)
-        return A[0][0];
-
-    double temp[lengthH][lengthH]; // To store cofactors
+    vector<vector<double>> temp(lengthH, vector<double>(lengthH)); // To store cofactors
 
     int sign = 1; // To store sign multiplier
 
@@ -444,8 +439,8 @@ int Matrix::determinant(double **A, int n)
     for (int f = 0; f < n; f++)
     {
         // Getting Cofactor of A[0][f]
-        getCofactor((double**)temp, 0, f, n);
-        D += sign * A[0][f] * determinant((double**)temp, n - 1);
+        getCofactor(temp, 0, f, n);
+        D += sign * A[0][f] * determinant(temp, n - 1);
 
         // terms are to be added with alternate sign
         sign = -sign;
@@ -455,25 +450,19 @@ int Matrix::determinant(double **A, int n)
 }
 
 // Function to get adjoint of A[N][N] in adj[N][N].
-void Matrix::adjoint(double **adj)
+void Matrix::adjoint(vector<vector<double>> & adj)
 {
-    /*if (N == 1)
-    {
-        adj[0][0] = 1;
-        return;
-    }*/
-
     // temp is used to store cofactors of A[][]
     int sign = 1;
-    
-    double temp[lengthH][lengthH];
+
+    vector<vector<double>> temp(lengthH, vector<double>(lengthH));
 
     for (int i = 0; i < lengthH; i++)
     {
         for (int j = 0; j < lengthH; j++)
         {
             // Get cofactor of A[i][j]
-            getCofactor((double**)temp, i, j, lengthH);
+            getCofactor(temp, i, j, lengthH);
 
             // sign of adj[j][i] positive if sum of row
             // and column indexes is even.
@@ -481,14 +470,14 @@ void Matrix::adjoint(double **adj)
 
             // Interchanging rows and columns to get the
             // transpose of the cofactor matrix
-            adj[j][i] = (sign) * (determinant((double**)temp, lengthH - 1));
+            adj[j][i] = (sign) * (determinant(temp, lengthH - 1));
         }
     }
 }
-
+/*
 // Function to calculate and store inverse, returns false if
 // matrix is singular
-bool Matrix::inverse(double **inverse)
+bool Matrix::inverse(vector<vector<double>> &inverse)
 {
     // Find determinant of A[][]
     int det = determinant(matrixH, lengthH);
@@ -500,7 +489,7 @@ bool Matrix::inverse(double **inverse)
 
     // Find adjoint
     double adj[lengthH][lengthH];
-    adjoint((double**)adj);
+    adjoint(adj);
 
     // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
     for (int i = 0; i < lengthH; i++)
@@ -509,13 +498,30 @@ bool Matrix::inverse(double **inverse)
 
     return true;
 }
-
-void Matrix::display(double **matrix)
+*/
+void Matrix::display(vector<vector<double>> matrix)
 {
     for (int i = 0; i < lengthH; i++)
+    {
         for (int j = 0; j < lengthH; j++)
         {
             cout << matrix[i][j] << "\t";
         }
-    cout << endl;
+        cout << endl;
+    }
+}
+
+vector<double> Matrix::multMatrix(vector<vector<double>> matrix)
+{
+    vector<double> mult(lengthB);
+
+    // Multiplying matrix a and b and storing in array mult.
+    for(int i = 0; i < lengthB; ++i)
+        for(int j = 0; j < lengthB; ++j)
+            for(int k = 0; k < lengthB; ++k)
+            {
+                mult[i] += matrixH[i][k] * matrix[k][j];
+            }
+
+    return mult;
 }

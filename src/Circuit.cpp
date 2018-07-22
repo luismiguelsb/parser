@@ -99,17 +99,15 @@ void Circuit::readFile(ifstream &myFile, string fileName)
 
         int l = Matrix::getlengthH();
 
-        double adj[l][l]; // To store adjoint of A[][]
-        
-        double inv[l][l]; // To store inverse of A[][]
+        vector<vector<double>> inv(l, vector<double>(l)); // To store inverse of A[][]
+ 
+        //cout << "\nThe Inverse is :\n";
+        //myMatrix.inverse(inv);
+        //myMatrix.display(inv);
 
-        cout << "\nThe Adjoint is :\n";
-        myMatrix.adjoint((double**)adj);
-        //myMatrix.display(adj);
-
-        cout << "\nThe Inverse is :\n";
-        if (myMatrix.inverse((double**)inv))
-            myMatrix.display((double**)inv);
+        //vector<double> Result;
+        //MNA = myMatrix.multMatrix(inv);
+        //myMatrix.display(Resut);
 
         myFile.close();
     }

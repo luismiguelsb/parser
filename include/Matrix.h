@@ -3,6 +3,8 @@
 
 using namespace std ;
 
+#define N 15
+
 #include <iostream>
 #include <fstream>
 #include <cstring> // for std::strlen
@@ -11,6 +13,7 @@ using namespace std ;
 #include <algorithm>
 #include <string>
 #include "Element.h"
+#include <vector>
 
 
 
@@ -41,11 +44,12 @@ public:
 	void initMatrixH(list <Element>);
 	void initMatrixB();
 	int lookstring(string);
-	void getCofactor(double **, int, int, int);
-	int determinant(double **, int);
-	void adjoint(double**);
-	bool inverse(double**);
-	void display(double**);
+	void getCofactor(vector<vector<double>> &, int, int, int);
+	int determinant(vector<vector<double>> &, int);
+	void adjoint(vector<vector<double>> &);
+	bool inverse(vector<vector<double>> &);
+	void display(vector<vector<double>>);
+	vector<double> multMatrix(vector<vector<double>>);
 
 
 };
