@@ -520,7 +520,7 @@ vector<double> Matrix::multMatrix(vector<vector<double>> matrix)
         for(int j = 0; j < lengthB; ++j)
             for(int k = 0; k < lengthB; ++k)
             {
-                mult[i] += matrixH[i][k] * matrix[k][j];
+                mult[i] += matrixB[i] * matrix[k][j];
             }
 
     return mult;

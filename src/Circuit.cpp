@@ -106,7 +106,7 @@ void Circuit::readFile(ifstream &myFile, string fileName)
         //myMatrix.display(inv);
 
         //vector<double> Result;
-        //MNA = myMatrix.multMatrix(inv);
+        //Resuult = myMatrix.multMatrix(inv);
         //myMatrix.display(Resut);
 
         myFile.close();
