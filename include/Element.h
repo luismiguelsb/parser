@@ -36,7 +36,6 @@ public:
     void InsertLabel(string);
     void InitializeListNode();
     int PrintListNode();
-    void PrintMatrix();
     double getvalue();
 
 };

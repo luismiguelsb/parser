@@ -14,6 +14,8 @@ void Circuit::readFile(ifstream &myFile, string fileName)
     myElement.InitializeListNode();
     myFile.open(fileName, ios::in);
 
+
+
     if (myFile.is_open())
     { //Abre para leitura
 
@@ -31,10 +33,6 @@ void Circuit::readFile(ifstream &myFile, string fileName)
             case 'i':
             case 'R': //Resistor
             case 'r':
-            case 'C': //Capacitor
-            case 'c':
-            case 'L': //Indutor
-            case 'l':
             case 'D': //Diodo
             case 'd':
                 Parameter = 4;
@@ -57,6 +55,11 @@ void Circuit::readFile(ifstream &myFile, string fileName)
             case 'E':
                 Parameter = 6;
                 break;
+            case 'L': //Indutor
+            case 'l':
+            case 'C': //Capacitor
+            case 'c':
+                Parameter = 8;
             case ' ':
             case '\t':
                 break;
@@ -93,20 +96,23 @@ void Circuit::readFile(ifstream &myFile, string fileName)
              << "Matrix H:" << endl;
         myMatrix.printMatrixH();
 
-        cout << endl
-             << "Matrix B:" << endl;
-        myMatrix.printMatrixB();
+        //cout << endl
+        //    << "Matrix B:" << endl;
+        //myMatrix.printMatrixB();
 
-        int l = Matrix::getlengthH();
+        //int l = Matrix::getlengthH();
 
-        vector<vector<double>> inv(l, vector<double>(l)); // To store inverse of A[][]
- 
+        //vector<vector<double>> inv(l, vector<double>(l)); // To store inverse of A[][]
+
         //cout << "\nThe Inverse is :\n";
         //myMatrix.inverse(inv);
         //myMatrix.display(inv);
 
+        //double stop, step;
+        //vector<double> matrixAux;
+        //matrixAux = myMatrix.ForwardEuler(matrixAux, stop,step);
         //vector<double> Result;
-        //MNA = myMatrix.multMatrix(inv);
+        //Result = myMatrix.multMatrix(inv,matrixAux);
         //myMatrix.display(Resut);
 
         myFile.close();
@@ -150,6 +156,10 @@ Element Circuit::readLabel(ifstream &myFile, char singleCharacter, int Parameter
                 Piece.nodeC = myElement.Mapping(point);
             if (Parameter == 7)
                 Piece.controlled = point;
+            if (Parameter == 8)
+            {
+                Piece.value = myElement.MappingDouble(point);
+            }
         }
         if (i == 4)
         {
@@ -162,6 +172,11 @@ Element Circuit::readLabel(ifstream &myFile, char singleCharacter, int Parameter
                 Piece.value = myElement.MappingDouble(point);
                 i = i + 2;
             }
+            if (Parameter == 8)
+            {
+                i = i + 3;
+                Piece.nodeC = myElement.MappingDouble(point);
+            }
         }
         if (i == 5)
             Piece.value = myElement.MappingDouble(point);
@@ -170,9 +185,12 @@ Element Circuit::readLabel(ifstream &myFile, char singleCharacter, int Parameter
     }
 
     if (i != Parameter)
-    {                    //Se o numero de parametros passado for diferente do esperado
-        Piece.id = '\0'; //Coloca o id com \0 para indicar erro
-        cout << "I: " << i << "Parameter: " << Parameter << endl;
+    { //Se o numero de parametros passado for diferente do esperado
+        if (!((Piece.id == 'C' || Piece.id == 'c') && i == Parameter - 4))
+        {
+            Piece.id = '\0'; //Coloca o id com \0 para indicar erro
+            cout << "I: " << i << " Parameter: " << Parameter << endl;
+        }
     }
 
     return Piece;

@@ -1,6 +1,8 @@
 #include "../include/Matrix.h"
 
 list<string> Group2Elements;
+list<string> CurrentsInd;
+list<string> CurrentsCap;
 
 //Default constructor
 Matrix::Matrix()
@@ -145,8 +147,12 @@ void Matrix::PrintList(list<Element> OriginalList)
 
             cout << "value =  ";
             cout.setf(ios::scientific);
-            cout << value << endl;
+            cout << value;
             cout.unsetf(ios::scientific);
+
+            if (id == 'C' || id == 'c' || id == 'L' || id == 'l')
+                cout << " ; Iinicial: " << nodeC;
+            cout << endl;
         }
         j++;
         ok = 1;
@@ -347,6 +353,39 @@ void Matrix::initMatrixH(list<Element> OriginalList)
                     matrixH[it->nodeB - 1][it->nodeD - 1] += it->value;
             }
         }
+
+        else if (it->id == 'C' || it->id == 'C')
+        { // Capacitor
+            if (it->nodeA != 0)
+            {
+                matrixH[it->nodeA - 1][lengthB + number - 1] += 1;
+                matrixH[lengthB + number - 1][it->nodeA - 1] += 1;
+            }
+            if (it->nodeB != 0)
+            {
+                matrixH[it->nodeB - 1][lengthB + number - 1] += -1;
+                matrixH[lengthB + number - 1][it->nodeB - 1] += -1;
+            }
+
+            matrixB[lengthB + number - 1] += it->value;
+
+            CurrentsCap.push_back(it->id + it->label);
+        }
+        else if (it->id == 'L' || it->id == 'l')
+        { // Indutor
+            if (it->nodeA != 0)
+            {
+                matrixH[it->nodeA - 1][lengthB + number - 1] += 1;
+            }
+            if (it->nodeB != 0)
+            {
+                matrixH[it->nodeB - 1][lengthB + number - 1] += -1;
+            }
+
+            matrixH[lengthB + number - 1][lengthB + number - 1] = 1;
+            matrixB[lengthB + number - 1] += it->value;
+            CurrentsInd.push_back(it->id + it->label);
+        }
     }
 }
 
@@ -450,7 +489,7 @@ int Matrix::determinant(vector<vector<double>> &A, int n)
 }
 
 // Function to get adjoint of A[N][N] in adj[N][N].
-void Matrix::adjoint(vector<vector<double>> & adj)
+void Matrix::adjoint(vector<vector<double>> &adj)
 {
     // temp is used to store cofactors of A[][]
     int sign = 1;
@@ -511,17 +550,50 @@ void Matrix::display(vector<vector<double>> matrix)
     }
 }
 
-vector<double> Matrix::multMatrix(vector<vector<double>> matrix)
+vector<double> Matrix::multMatrix(vector<vector<double>> matrixA, vector<vector<double>> matrixB)
 {
     vector<double> mult(lengthB);
 
+    //matrixB = matrixH;
+
     // Multiplying matrix a and b and storing in array mult.
-    for(int i = 0; i < lengthB; ++i)
-        for(int j = 0; j < lengthB; ++j)
-            for(int k = 0; k < lengthB; ++k)
+    for (int i = 0; i < lengthB; ++i)
+        for (int j = 0; j < lengthB; ++j)
+            for (int k = 0; k < lengthB; ++k)
             {
-                mult[i] += matrixH[i][k] * matrix[k][j];
+                mult[i] += matrixA[i][k] * matrixB[k][j];
             }
 
     return mult;
 }
+
+/*vector<double> Matrix::ForwardEuler(vector<double> x, double stop, double step)
+{
+    vector<double> matrixZ;
+
+    for (int i = 1; i < (stop / step); i++)
+    {
+        //cout << i <<" "<< i*p->getTstep() <<" " << il << " " << vc << endl;
+        std::list<string>::iterator it;
+        std::list<Element>::iterator it2;
+
+        double value;
+
+        for (auto it = CurrentsCap.begin(); it != CurrentsCap.end(); ++it)
+        {
+            it2 = find(Group2Elements.begin(), Group2Elements.end(), it->c_str);
+            int number = lookstring(it);
+            matrixZ[lengthB + number - 1] = x[it2->nodeA - 1] + (step / it2->value) * x[lengthB + number - 1];
+        }
+
+        for (auto it = CurrentsInd.begin(); it != CurrentsInd.end(); ++it)
+        {
+            it2 = find(Group2Elements.begin(), Group2Elements.end(), it->c_str);
+            int number = lookstring(it);
+            matrixZ[lengthB + number - 1] = x[lengthB + number - 1] + (step / it2->value) * (x[it2->nodeA - 1] - x[it2->nodeB - 1]);
+        }
+
+        return matrixZ;
+    }
+}
+*/

@@ -26,18 +26,7 @@ public:
 	void printMatrixH(); //Method to display the matrix
 	void printMatrixB(); //Method to display the matrix
 	~Matrix(); //Destructor
-
-private:
-	static int lengthH;
-	static int lengthB;
-	double **matrixH;
-	double *matrixB;
-	//allocate the array
-	void allocArray();
-
-public:
-    //funcoes
-    static void PrintList(list <Element>);
+	static void PrintList(list <Element>);
     static void SetGroup2(list <Element>, int);
 	static int getlengthH();
 	static int getlengthB();
@@ -49,8 +38,18 @@ public:
 	void adjoint(vector<vector<double>> &);
 	bool inverse(vector<vector<double>> &);
 	void display(vector<vector<double>>);
-	vector<double> multMatrix(vector<vector<double>>);
+	vector<double> multMatrix(vector<vector<double>>, vector<vector<double>>);
+	vector<double> ForwardEuler(vector<double>, double, double);
 
+
+
+private:
+	static int lengthH;
+	static int lengthB;
+	double **matrixH;
+	double *matrixB;
+	//allocate the array
+	void allocArray();
 
 };
 
